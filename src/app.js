@@ -10,7 +10,7 @@ import format from "./format";
 import "./app.css";
 
 const axios = require("axios").default;
-const URL = "https://ratio-calculator-backend.herokuapp.com//api/recipes";
+const URL = "https://ratio-calculator-backend.herokuapp.com/api/recipes";
 
 class App extends Component {
   // Initialize all state values to empty
