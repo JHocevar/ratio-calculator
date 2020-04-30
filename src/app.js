@@ -24,8 +24,19 @@ class App extends Component {
   // Returns an arrray with all the recipes from the database
   getAllRecipes = async () => {
     let url = URL + "/all";
-    let res = await axios.get(url, {});
-    return await res.data;
+    console.log("Retrieving data from " + url);
+    return axios
+      .get(url, {})
+      .then((data) => {
+        console.log("Recieved data", data);
+        return data;
+      })
+      .catch((error) => {
+        console.log("Error is", error);
+      });
+
+    // let res = await axios.get(url, {});
+    // return await res.data;
   };
 
   // Sets the state to all the recipes retrieved from getAllRecipes
