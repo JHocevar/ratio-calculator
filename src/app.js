@@ -10,7 +10,7 @@ import format from "./format";
 import "./app.css";
 
 const axios = require("axios").default;
-const URL = "http://localhost:8000/api/recipes";
+const URL = "https://ratio-calculator-backend.herokuapp.com//api/recipes";
 
 class App extends Component {
   // Initialize all state values to empty
@@ -18,7 +18,7 @@ class App extends Component {
     menu: "none",
     recipes: [], // List of all recipes obtainted from the database
     tree: { name: "", amount: 0, recipe: {}, subTree: [] }, // Keeps track of the recursive table of recipes the user has chosen
-    totals: {}
+    totals: {},
   };
 
   // Returns an arrray with all the recipes from the database
@@ -30,41 +30,41 @@ class App extends Component {
 
   // Sets the state to all the recipes retrieved from getAllRecipes
   updateRecipes = () => {
-    this.getAllRecipes().then(data => this.setState({ recipes: data }));
+    this.getAllRecipes().then((data) => this.setState({ recipes: data }));
   };
 
   // Returns recipes for a given itemName
-  getResponse = async itemName => {
+  getResponse = async (itemName) => {
     var url = URL + "/" + itemName;
     return axios
       .get(url, {})
-      .then(data => {
+      .then((data) => {
         console.log("Recieved data", data);
         return data;
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("Error is", error);
       });
   };
 
   // Posts item to the database
-  postResponse = async item => {
+  postResponse = async (item) => {
     var url = URL + "/" + item.name;
     console.log("posting item", item);
     axios
       .post(url, item)
-      .then(response => {
+      .then((response) => {
         // When we get the responce back,
         console.log("Recipe added successfully");
         let recipes = this.state.recipes;
         recipes.push(item);
         this.setState({ recipes });
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   };
 
   addItemRecursive(subTree, totals) {
-    subTree.forEach(item => {
+    subTree.forEach((item) => {
       if (item.subTree.length > 0)
         totals = this.addItemRecursive(item.subTree, totals);
       else {
@@ -79,7 +79,7 @@ class App extends Component {
   updateTree(tree) {
     let amount = tree.amount;
     if (tree.subTree.length === 0) return;
-    tree.subTree.forEach(item => {
+    tree.subTree.forEach((item) => {
       item.amount = item.ratio * amount; // Update the amount for the item
       if (item.subTree.length > 0)
         // Then update its children if it has any,
@@ -91,7 +91,7 @@ class App extends Component {
   // Update the totals state variable by recursively diving into the tree and getting the totals
   updateTotals(tree) {
     let totals = {};
-    tree.subTree.forEach(item => {
+    tree.subTree.forEach((item) => {
       if (item.subTree.length > 0) {
         totals = this.addItemRecursive(item.subTree, totals);
       } else {
@@ -103,14 +103,14 @@ class App extends Component {
   }
 
   // Changes the menu to the argument provided, if it is valid
-  changeMenu = newMenu => {
+  changeMenu = (newMenu) => {
     if (newMenu !== "changeItem" && newMenu !== "addItem" && newMenu !== "none")
       return; // We cannot change to a menu that does not exist
     this.setState({ menu: newMenu });
   };
 
   // Handles changes in the amount of the selected item we want to produce
-  handleSelectedAmount = event => {
+  handleSelectedAmount = (event) => {
     let tree = this.state.tree;
     let newAmount = format(event.target.value);
     tree.amount = newAmount;
@@ -131,7 +131,7 @@ class App extends Component {
   };
 
   // Handles changes to the current item we want to produce
-  handleSelectedItem = item => {
+  handleSelectedItem = (item) => {
     let tree = this.state.tree;
     tree.name = item.itemName;
     tree.recipe = item;
@@ -213,7 +213,7 @@ class App extends Component {
           <div className="col-10 offset-1">
             <TreeView
               tree={this.state.tree}
-              onChange={recievedTree => {
+              onChange={(recievedTree) => {
                 console.log(
                   "recieved the updated tree",
                   JSON.parse(JSON.stringify(recievedTree))
