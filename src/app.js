@@ -133,7 +133,6 @@ class App extends Component {
           (tree.recipe.ingredientAmounts[index] * newAmount) /
             tree.recipe.produced
         );
-        console.log("set amount of", item, "to", item.amount);
         this.updateTree(item); // Update the entire subtree for each main ingredient
       });
     }
@@ -154,8 +153,8 @@ class App extends Component {
       newItem.subTree = [];
       return newItem;
     });
-    this.setState({ tree });
     this.updateTree(this.state.tree);
+    this.setState({ tree });
   };
 
   // Render Popup window for selecting an item
@@ -226,10 +225,6 @@ class App extends Component {
             <TreeView
               tree={this.state.tree}
               onChange={(recievedTree) => {
-                console.log(
-                  "recieved the updated tree",
-                  JSON.parse(JSON.stringify(recievedTree))
-                );
                 this.setState({ tree: recievedTree });
                 this.updateTotals(this.state.tree);
               }}

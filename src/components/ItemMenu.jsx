@@ -4,7 +4,7 @@ import "./Menus.css";
 class ItemMenu extends Component {
   state = {
     menu: "item", // Choices, item / menu
-    selectedItem: ""
+    selectedItem: "",
   };
 
   selectItem(item) {
@@ -16,7 +16,7 @@ class ItemMenu extends Component {
   renderItemChoices() {
     if (this.state.menu !== "item") return;
     let recipeChoices = [];
-    this.props.items.forEach(recipe => {
+    this.props.items.forEach((recipe) => {
       if (!recipeChoices.includes(recipe.itemName))
         recipeChoices.push(recipe.itemName);
     });
@@ -44,13 +44,13 @@ class ItemMenu extends Component {
   renderRecipeChoices() {
     if (this.state.menu !== "recipe") return;
     let recipes = [];
-    this.props.items.forEach(recipe => {
+    this.props.items.forEach((recipe) => {
       if (this.state.selectedItem === recipe.itemName) recipes.push(recipe);
     });
 
     return (
       <div className="items">
-        {recipes.map(recipe => {
+        {recipes.map((recipe) => {
           return (
             <div
               className="item-box"
@@ -72,7 +72,6 @@ class ItemMenu extends Component {
   renderHover() {
     let item = this.state.hoveredRecipe;
     if (!item.hasOwnProperty("ingredientNames")) return;
-    console.log("item is ", item);
     return (
       <>
         <h3>{item.recipeName}</h3>
