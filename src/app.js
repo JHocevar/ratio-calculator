@@ -86,8 +86,26 @@ class App extends Component {
     return totals;
   }
 
+  // Call updateTree on each of the main ingredients of the tree
+  updateEntireTree() {
+    const tree = this.state.tree;
+    const amount = tree.amount;
+    if (tree.name !== "") {
+      // Because the user has already selected the recipe to use, we can update
+      // the amounts of each item required each time the amount of the main item is changed
+      tree.subTree.forEach((item, index) => {
+        item.amount = format(
+          (tree.recipe.ingredientAmounts[index] * amount) / tree.recipe.produced
+        );
+        this.updateTree(item); // Update the entire subtree for each main ingredient
+      });
+    }
+  }
+
   // Recursively update the branch of a main ingredient of the tree, updating amounts
   updateTree(tree) {
+    console.log("updating tree!");
+    console.log(JSON.parse(JSON.stringify(tree)));
     let amount = tree.amount;
     if (tree.subTree.length === 0) return;
     tree.subTree.forEach((item) => {
@@ -125,17 +143,7 @@ class App extends Component {
     let tree = this.state.tree;
     let newAmount = format(event.target.value);
     tree.amount = newAmount;
-    if (tree.name !== "") {
-      // Because the user has already selected the recipe to use, we can update
-      // the amounts of each item required each time the amount of the main item is changed
-      tree.subTree.forEach((item, index) => {
-        item.amount = format(
-          (tree.recipe.ingredientAmounts[index] * newAmount) /
-            tree.recipe.produced
-        );
-        this.updateTree(item); // Update the entire subtree for each main ingredient
-      });
-    }
+    this.updateEntireTree();
     this.updateTotals(tree);
     this.setState({ tree });
   };
@@ -145,6 +153,8 @@ class App extends Component {
     let tree = this.state.tree;
     tree.name = item.itemName;
     tree.recipe = item;
+    // Set amount to 1 if it is still at 0
+    if (tree.amount === 0) tree.amount = 1;
     // Create the initial subtree with the ingredients of the main recipe
     tree.subTree = item.ingredientNames.map((name, index) => {
       let newItem = {};
@@ -153,7 +163,7 @@ class App extends Component {
       newItem.subTree = [];
       return newItem;
     });
-    this.updateTree(this.state.tree);
+    this.updateEntireTree();
     this.setState({ tree });
   };
 
@@ -226,6 +236,7 @@ class App extends Component {
               tree={this.state.tree}
               onChange={(recievedTree) => {
                 this.setState({ tree: recievedTree });
+                this.updateEntireTree();
                 this.updateTotals(this.state.tree);
               }}
               recipes={this.state.recipes}

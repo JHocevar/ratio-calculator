@@ -77,12 +77,12 @@ class ItemMenu extends Component {
         <h3>{item.recipeName}</h3>
         {item.ingredientNames.map((ingredient, index) => {
           return (
-            <>
+            <div key={index}>
               <span key={index}>
                 {item.ingredientAmounts[index]}x {ingredient}
               </span>
               <br></br>
-            </>
+            </div>
           );
         })}
       </>
