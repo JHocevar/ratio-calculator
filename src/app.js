@@ -41,7 +41,7 @@ class App extends Component {
 
   // Sets the state to all the recipes retrieved from getAllRecipes
   updateRecipes = () => {
-    this.getAllRecipes().then((data) => this.setState({ recipes: data }));
+    this.getAllRecipes().then((data) => this.setState({ recipes: data.data }));
   };
 
   // Returns recipes for a given itemName
