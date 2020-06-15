@@ -17,7 +17,7 @@ class App extends Component {
   state = {
     menu: "none",
     recipes: [], // List of all recipes obtainted from the database
-    tree: { name: "", amount: 0, recipe: {}, subTree: [] }, // Keeps track of the recursive table of recipes the user has chosen
+    tree: { name: "", amount: 0, recipe: [], subTree: [] }, // Keeps track of the recursive table of recipes the user has chosen
     totals: {},
   };
 
